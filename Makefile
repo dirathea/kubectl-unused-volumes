@@ -7,7 +7,7 @@ test:
 
 .PHONY: bin
 bin: fmt vet
-	go build -o bin/{{ .PluginName }} github.com/{{ .Owner }}/{{ .Repo }}/cmd/plugin
+	go build -o bin/kubectl-volume-reclaim github.com/dirathea/kubectl-volume-reclaim/cmd/plugin
 
 .PHONY: fmt
 fmt:

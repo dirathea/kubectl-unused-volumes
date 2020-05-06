@@ -1,4 +1,4 @@
-module github.com/replicatedhq/krew-plugin-template
+module github.com/dirathea/kubectl-volume-reclaim
 
 go 1.12
 
