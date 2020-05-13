@@ -1,6 +1,6 @@
 # kubectl-volume-reclaim kubectl
 
-A `kubectl` plugin to ...
+A `kubectl` plugin to find unused PVC
 
 ## Quick Start
 

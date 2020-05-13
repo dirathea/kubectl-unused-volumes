@@ -19,4 +19,4 @@ kubectl kubectl-volume-reclaim --context=context-name
 ```
 
 ## How it works
-Write a brief description of your plugin here.
+Gather all pods and PVC on a namespaces, and output all pvcs that doesn't belong to any pod.

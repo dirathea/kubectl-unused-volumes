@@ -35,30 +35,30 @@ func RootCmd() *cobra.Command {
 
 			s := spin.New()
 			finishedCh := make(chan bool, 1)
-			namespaceName := make(chan string, 1)
+			output := make(chan string, 1)
 			go func() {
-				lastNamespaceName := ""
+				tableOutput := ""
 				for {
 					select {
 					case <-finishedCh:
 						fmt.Printf("\r")
 						return
-					case n := <-namespaceName:
-						lastNamespaceName = n
+					case n := <-output:
+						tableOutput = n
 					case <-time.After(time.Millisecond * 100):
-						if lastNamespaceName == "" {
-							fmt.Printf("\r  \033[36mSearching for namespaces\033[m %s", s.Next())
+						if tableOutput == "" {
+							fmt.Printf("\r  \033[36mChecking PVC\033[m %s", s.Next())
 						} else {
-							fmt.Printf("\r  \033[36mSearching for namespaces\033[m %s (%s)", s.Next(), lastNamespaceName)
+							fmt.Printf("\r  \033[36mChecking PVC\033[m %s  \r %s", s.Next(), tableOutput)
 						}
 					}
 				}
 			}()
-			defer func() {
-				finishedCh <- true
-			}()
+			// defer func() {
+			// 	finishedCh <- true
+			// }()
 
-			if err := plugin.RunPlugin(KubernetesConfigFlags, namespaceName); err != nil {
+			if err := plugin.RunPlugin(KubernetesConfigFlags, output); err != nil {
 				return errors.Cause(err)
 			}
 
