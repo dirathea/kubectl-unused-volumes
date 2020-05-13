@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/dirathea/kubectl-volume-reclaim/pkg/logger"
 	"github.com/dirathea/kubectl-volume-reclaim/pkg/plugin"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tj/go-spin"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 )
 
@@ -32,32 +30,12 @@ func RootCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			log := logger.NewLogger()
 			log.Info("")
-
-			s := spin.New()
-			finishedCh := make(chan bool, 1)
-			output := make(chan string, 1)
-			go func() {
-				tableOutput := ""
-				for {
-					select {
-					case n := <-output:
-						tableOutput = n
-						fmt.Printf("%s \r", tableOutput)
-						finishedCh <- true
-						return
-					case <-time.After(time.Millisecond * 100):
-						fmt.Printf("\r  \033[36mChecking PVC\033[m %s", s.Next())
-					}
-				}
-			}()
-
-			if err := plugin.RunPlugin(KubernetesConfigFlags, output); err != nil {
+			output, err := plugin.RunPlugin(KubernetesConfigFlags)
+			if err != nil {
 				return errors.Cause(err)
 			}
 
-			<-finishedCh
-
-			log.Info("")
+			fmt.Println(output)
 
 			return nil
 		},

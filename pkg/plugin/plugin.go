@@ -8,16 +8,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func RunPlugin(configFlags *genericclioptions.ConfigFlags, outputCh chan string) error {
+func RunPlugin(configFlags *genericclioptions.ConfigFlags) (string, error) {
 	// log := logger.NewLogger()
 	config, err := configFlags.ToRESTConfig()
 	if err != nil {
-		return errors.Wrap(err, "failed to read kubeconfig")
+		return "", errors.Wrap(err, "failed to read kubeconfig")
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		return errors.Wrap(err, "failed to create clientset")
+		return "", errors.Wrap(err, "failed to create clientset")
 	}
 
 	// get all pvcs on namespace
@@ -25,12 +25,12 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags, outputCh chan string)
 
 	// namespaces, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
 	if err != nil {
-		return errors.Wrap(err, "failed to get all pvc in namespaces")
+		return "", errors.Wrap(err, "failed to get all pvc in namespaces")
 	}
 
 	podList, err := GetAllPod(clientset, "default")
 	if err != nil {
-		return errors.Wrap(err, "failed to get all pod in namespaces")
+		return "", errors.Wrap(err, "failed to get all pod in namespaces")
 	}
 
 	allClaimsFromPod := []string{}
@@ -44,13 +44,13 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags, outputCh chan string)
 	}
 
 	table := uitable.New()
-	table.AddRow("Name", "Volume Name", "Size", "Storage Class")
+	table.AddRow("Name", "Volume Name", "Size")
 
 	for _, p := range pvcList {
-		table.AddRow(p.Name, p.Spec.VolumeName, p.Spec.Resources.Requests[v1.ResourceStorage], p.Spec.StorageClassName)
-	}
-	// log.Info(table.String())
-	outputCh <- table.String()
+		storageSize := p.Spec.Resources.Requests[v1.ResourceStorage]
 
-	return nil
+		table.AddRow(p.Name, p.Spec.VolumeName, storageSize.String())
+	}
+
+	return table.String(), nil
 }
