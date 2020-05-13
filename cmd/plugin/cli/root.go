@@ -40,27 +40,22 @@ func RootCmd() *cobra.Command {
 				tableOutput := ""
 				for {
 					select {
-					case <-finishedCh:
-						fmt.Printf("\r")
-						return
 					case n := <-output:
 						tableOutput = n
+						fmt.Printf("%s \r", tableOutput)
+						finishedCh <- true
+						return
 					case <-time.After(time.Millisecond * 100):
-						if tableOutput == "" {
-							fmt.Printf("\r  \033[36mChecking PVC\033[m %s", s.Next())
-						} else {
-							fmt.Printf("\r  \033[36mChecking PVC\033[m %s  \r %s", s.Next(), tableOutput)
-						}
+						fmt.Printf("\r  \033[36mChecking PVC\033[m %s", s.Next())
 					}
 				}
 			}()
-			// defer func() {
-			// 	finishedCh <- true
-			// }()
 
 			if err := plugin.RunPlugin(KubernetesConfigFlags, output); err != nil {
 				return errors.Cause(err)
 			}
+
+			<-finishedCh
 
 			log.Info("")
 

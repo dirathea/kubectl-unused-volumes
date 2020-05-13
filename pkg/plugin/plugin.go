@@ -1,8 +1,6 @@
 package plugin
 
 import (
-	"fmt"
-
 	"github.com/gosuri/uitable"
 	"github.com/pkg/errors"
 	v1 "k8s.io/api/core/v1"
@@ -11,6 +9,7 @@ import (
 )
 
 func RunPlugin(configFlags *genericclioptions.ConfigFlags, outputCh chan string) error {
+	// log := logger.NewLogger()
 	config, err := configFlags.ToRESTConfig()
 	if err != nil {
 		return errors.Wrap(err, "failed to read kubeconfig")
@@ -50,8 +49,7 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags, outputCh chan string)
 	for _, p := range pvcList {
 		table.AddRow(p.Name, p.Spec.VolumeName, p.Spec.Resources.Requests[v1.ResourceStorage], p.Spec.StorageClassName)
 	}
-
-	fmt.Println(table.String())
+	// log.Info(table.String())
 	outputCh <- table.String()
 
 	return nil
