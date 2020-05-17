@@ -1,19 +1,21 @@
 package plugin
 
 import (
-	v1 "k8s.io/api/core/v1"
+	"github.com/dirathea/kubectl-volume-reclaim/pkg/api"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetAllPvc(clientSet *kubernetes.Clientset, namespace string) (map[string]v1.PersistentVolumeClaim, error) {
+func GetAllPvc(clientSet *kubernetes.Clientset, namespace string) (volumes []*api.Volume, err error) {
 	list, err := clientSet.CoreV1().PersistentVolumeClaims(namespace).List(metaV1.ListOptions{})
 	if err != nil {
-		return map[string]v1.PersistentVolumeClaim{}, err
+		return
 	}
-	result := map[string]v1.PersistentVolumeClaim{}
 	for _, pvc := range list.Items {
-		result[pvc.Name] = pvc
+		volumes = append(volumes, &api.Volume{
+			PersistentVolumeClaim: pvc,
+			Reason:                api.NO_RESOURCE_REFFERENCE,
+		})
 	}
-	return result, err
+	return
 }
