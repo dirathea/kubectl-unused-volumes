@@ -13,24 +13,24 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func RunPlugin(configFlags *genericclioptions.ConfigFlags) (string, error) {
+func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err error) {
 	// log := logger.NewLogger()
 	config, err := configFlags.ToRESTConfig()
 	if err != nil {
-		return "", errors.Wrap(err, "failed to read kubeconfig")
+		err = errors.Wrap(err, "failed to read kubeconfig")
+		return
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to create clientset")
+		err = errors.Wrap(err, "failed to create clientset")
+		return
 	}
 
-	// get all pvcs on namespace
-	pvcList, err := GetAllPvc(clientset, "default")
-
-	// namespaces, err := clientset.CoreV1().Namespaces().List(metav1.ListOptions{})
+	volumes, err := GetVolumes(clientset, *configFlags.Namespace)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to get all pvc in namespaces")
+		err = errors.Wrap(err, "failed to get all pvc in namespaces")
+		return
 	}
 
 	var wg sync.WaitGroup
@@ -47,7 +47,7 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (string, error) {
 	for _, f := range allResources {
 		wg.Add(1)
 		go func(getWorkloadFunc func(client *kubernetes.Clientset, namespace string) ([]api.Workload, error)) {
-			lists, err := getWorkloadFunc(clientset, v1.NamespaceDefault)
+			lists, err := getWorkloadFunc(clientset, *configFlags.Namespace)
 			if err != nil {
 				return
 			}
@@ -60,23 +60,24 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (string, error) {
 
 	for _, wk := range workloads {
 		if !wk.IsEmpty() {
-			removeVolume(pvcList, wk)
+			removeVolume(volumes, wk)
 		} else {
-			markVolumeAsZeroReplica(pvcList, wk)
+			markVolumeAsZeroReplica(volumes, wk)
 		}
 	}
 
 	table := uitable.New()
 	table.AddRow("Name", "Volume Name", "Size", "Reason", "Used By")
 
-	for _, p := range pvcList {
+	for _, p := range volumes {
 		if p != nil {
 			storageSize := p.Spec.Resources.Requests[v1.ResourceStorage]
 			table.AddRow(p.Name, p.Spec.VolumeName, storageSize.String(), p.Reason, workload.Join(p.Workloads, ","))
 		}
 	}
+	output = table.String()
 
-	return table.String(), nil
+	return
 }
 
 func removeVolume(volumes []*api.Volume, workload api.Workload) {

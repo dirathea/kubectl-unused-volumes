@@ -6,7 +6,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetAllPvc(clientSet *kubernetes.Clientset, namespace string) (volumes []*api.Volume, err error) {
+func GetVolumes(clientSet *kubernetes.Clientset, namespace string) (volumes []*api.Volume, err error) {
 	list, err := clientSet.CoreV1().PersistentVolumeClaims(namespace).List(metaV1.ListOptions{})
 	if err != nil {
 		return
