@@ -7,7 +7,7 @@ test:
 
 .PHONY: bin
 bin: fmt vet
-	go build -o bin/kubectl-volume-reclaim github.com/dirathea/kubectl-volume-reclaim/cmd/plugin
+	go build -o bin/volume-reclaim github.com/dirathea/kubectl-volume-reclaim/cmd/plugin
 
 .PHONY: fmt
 fmt:
@@ -27,3 +27,11 @@ kubernetes-deps:
 .PHONY: setup
 setup:
 	make -C setup
+
+.PHONY: snapshot
+snapshot: fmt vet
+	goreleaser build --snapshot --rm-dist
+
+.PHONY: release
+pre-release: fmt vet
+	goreleaser

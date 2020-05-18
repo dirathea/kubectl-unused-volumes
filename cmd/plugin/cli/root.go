@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dirathea/kubectl-volume-reclaim/pkg/logger"
 	"github.com/dirathea/kubectl-volume-reclaim/pkg/plugin"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -19,7 +18,7 @@ var (
 
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:           "kubectl-volume-reclaim",
+		Use:           "volume-reclaim",
 		Short:         "",
 		Long:          `.`,
 		SilenceErrors: true,
@@ -28,13 +27,10 @@ func RootCmd() *cobra.Command {
 			viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			log := logger.NewLogger()
-			log.Info("")
 			output, err := plugin.RunPlugin(KubernetesConfigFlags)
 			if err != nil {
 				return errors.Cause(err)
 			}
-
 			fmt.Println(output)
 
 			return nil
