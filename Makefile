@@ -33,5 +33,5 @@ snapshot: fmt vet
 	goreleaser build --snapshot --rm-dist
 
 .PHONY: release
-pre-release: fmt vet
+release: fmt vet
 	goreleaser
