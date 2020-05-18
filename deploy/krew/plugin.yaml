@@ -1,7 +1,7 @@
 apiVersion: krew.googlecontainertools.github.com/v1alpha2
 kind: Plugin
 metadata:
-  name: kubectl-volume-reclaim
+  name: volume-reclaim
 spec:
   version: "v0.1.0"
   platforms:
@@ -12,11 +12,11 @@ spec:
     uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_linux_amd64.tar.gz
     sha256: ""
     files:
-    - from: "./kubectl-volume-reclaim"
+    - from: "./volume-reclaim"
       to: "."
     - from: LICENSE
       to: "."
-    bin: "kubectl-volume-reclaim"
+    bin: "volume-reclaim"
   - selector:
       matchLabels:
         os: darwin
@@ -24,11 +24,11 @@ spec:
     uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_darwin_amd64.tar.gz
     sha256: ""
     files:
-    - from: "./kubectl-volume-reclaim"
+    - from: "./volume-reclaim"
       to: "."
     - from: LICENSE
       to: "."
-    bin: "kubectl-volume-reclaim"
+    bin: "volume-reclaim"
   - selector:
       matchLabels:
         os: windows
@@ -36,20 +36,21 @@ spec:
     uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_windows_amd64.zip
     sha256: ""
     files:
-    - from: "/kubectl-volume-reclaim.exe"
+    - from: "/volume-reclaim.exe"
       to: "."
     - from: LICENSE
       to: "."
-    bin: "kubectl-volume-reclaim.exe"
-  shortDescription: A new plugin
+    bin: "volume-reclaim.exe"
+  shortDescription: Gather all PVC and output all pvcs that doesn't belong to any workloads.
   homepage: https://github.com/dirathea/kubectl-volume-reclaim
   caveats: |
     Usage:
-      $ kubectl kubectl-volume-reclaim
+      $ kubectl volume-reclaim
 
     For additional options:
-      $ kubectl kubectl-volume-reclaim --help
+      $ kubectl volume-reclaim --help
       or https://github.com/dirathea/kubectl-volume-reclaim/blob/v0.1.0/doc/USAGE.md
 
   description: |
-    This is a new plugin
+    Kubectl plugins to gather all PVC and check whether it used in any workloads on cluster or not.
+    This could help users to remove unecessary PVCs that lead to reducing unecesary cost by unused persistent disk
