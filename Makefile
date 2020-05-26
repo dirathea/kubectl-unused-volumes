@@ -7,7 +7,7 @@ test:
 
 .PHONY: bin
 bin: fmt vet
-	go build -o bin/volume-reclaim github.com/dirathea/kubectl-volume-reclaim/cmd/plugin
+	go build -o bin/unused-volumes github.com/dirathea/kubectl-unused-volumes/cmd/plugin
 
 .PHONY: fmt
 fmt:

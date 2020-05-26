@@ -1,11 +1,11 @@
-project_name: kubectl-volume-reclaim
+project_name: kubectl-unused-volumes
 release:
   github:
     owner: dirathea
-    name: kubectl-volume-reclaim
+    name: kubectl-unused-volumes
 builds:
-  - id: kubectl-volume-reclaim
-    binary: volume-reclaim
+  - id: kubectl-unused-volumes
+    binary: unused-volumes
     goos:
     - linux
     - windows
@@ -18,11 +18,11 @@ builds:
       - GO111MODULE=on
     main: cmd/plugin/main.go
     ldflags: -s -w
-      -X github.com/dirathea/kubectl-volume-reclaim/pkg/version.version=
+      -X github.com/dirathea/kubectl-unused-volumes/pkg/version.version=
 archives:
-  - id: kubectl-volume-reclaim
+  - id: kubectl-unused-volumes
     builds:
-    - kubectl-volume-reclaim
+    - kubectl-unused-volumes
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
     - goos: windows
