@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/dirathea/kubectl-volume-reclaim/pkg/api"
+	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

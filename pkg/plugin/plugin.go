@@ -4,8 +4,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/dirathea/kubectl-volume-reclaim/pkg/api"
-	"github.com/dirathea/kubectl-volume-reclaim/pkg/workload"
+	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
+	"github.com/dirathea/kubectl-unused-volumes/pkg/workload"
 	"github.com/gosuri/uitable"
 	"github.com/pkg/errors"
 	v1 "k8s.io/api/core/v1"

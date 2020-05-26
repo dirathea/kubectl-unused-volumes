@@ -9,7 +9,7 @@ spec:
       matchLabels:
         os: linux
         arch: amd64
-    uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_linux_amd64.tar.gz
+    uri: https://github.com/dirathea/kubectl-unused-volumes/releases/download/v0.1.0/kubectl-volume-reclaim_linux_amd64.tar.gz
     sha256: ""
     files:
     - from: "./volume-reclaim"
@@ -21,7 +21,7 @@ spec:
       matchLabels:
         os: darwin
         arch: amd64
-    uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_darwin_amd64.tar.gz
+    uri: https://github.com/dirathea/kubectl-unused-volumes/releases/download/v0.1.0/kubectl-volume-reclaim_darwin_amd64.tar.gz
     sha256: ""
     files:
     - from: "./volume-reclaim"
@@ -33,7 +33,7 @@ spec:
       matchLabels:
         os: windows
         arch: amd64
-    uri: https://github.com/dirathea/kubectl-volume-reclaim/releases/download/v0.1.0/kubectl-volume-reclaim_windows_amd64.zip
+    uri: https://github.com/dirathea/kubectl-unused-volumes/releases/download/v0.1.0/kubectl-volume-reclaim_windows_amd64.zip
     sha256: ""
     files:
     - from: "/volume-reclaim.exe"
@@ -42,14 +42,14 @@ spec:
       to: "."
     bin: "volume-reclaim.exe"
   shortDescription: Gather all PVC and output all pvcs that doesn't belong to any workloads.
-  homepage: https://github.com/dirathea/kubectl-volume-reclaim
+  homepage: https://github.com/dirathea/kubectl-unused-volumes
   caveats: |
     Usage:
       $ kubectl volume-reclaim
 
     For additional options:
       $ kubectl volume-reclaim --help
-      or https://github.com/dirathea/kubectl-volume-reclaim/blob/v0.1.0/doc/USAGE.md
+      or https://github.com/dirathea/kubectl-unused-volumes/blob/v0.1.0/doc/USAGE.md
 
   description: |
     Kubectl plugins to gather all PVC and check whether it used in any workloads on cluster or not.

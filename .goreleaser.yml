@@ -18,7 +18,7 @@ builds:
       - GO111MODULE=on
     main: cmd/plugin/main.go
     ldflags: -s -w
-      -X github.com/dirathea/kubectl-volume-reclaim/pkg/version.version=
+      -X github.com/dirathea/kubectl-unused-volumes/pkg/version.version=
 archives:
   - id: kubectl-volume-reclaim
     builds:

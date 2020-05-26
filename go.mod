@@ -1,4 +1,4 @@
-module github.com/dirathea/kubectl-volume-reclaim
+module github.com/dirathea/kubectl-unused-volumes
 
 go 1.12
 
