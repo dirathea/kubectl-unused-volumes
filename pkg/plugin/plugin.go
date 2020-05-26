@@ -1,13 +1,14 @@
 package plugin
 
 import (
+	"context"
 	"strings"
-	"sync"
 
 	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
 	"github.com/dirathea/kubectl-unused-volumes/pkg/workload"
 	"github.com/gosuri/uitable"
 	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/kubernetes"
@@ -33,8 +34,6 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err e
 		return
 	}
 
-	var wg sync.WaitGroup
-
 	allResources := []func(client *kubernetes.Clientset, namespace string) ([]api.Workload, error){
 		workload.GetAllDaemonSet,
 		workload.GetAllDeployment,
@@ -43,20 +42,24 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err e
 	}
 
 	workloads := []api.Workload{}
+	fetchGroup, _ := errgroup.WithContext(context.Background())
 
 	for _, f := range allResources {
-		wg.Add(1)
-		go func(getWorkloadFunc func(client *kubernetes.Clientset, namespace string) ([]api.Workload, error)) {
-			lists, err := getWorkloadFunc(clientset, *configFlags.Namespace)
-			if err != nil {
-				return
+		fetcherFunction := f
+		fetchGroup.Go(func() error {
+			lists, err := fetcherFunction(clientset, *configFlags.Namespace)
+			if err == nil {
+				workloads = append(workloads, lists...)
 			}
-			workloads = append(workloads, lists...)
-			wg.Done()
-		}(f)
+			return err
+		})
 	}
 
-	wg.Wait()
+	// Wait for all HTTP fetches to complete.
+	if err = fetchGroup.Wait(); err != nil {
+		err = errors.Wrap(err, "failed to get all pvc in namespaces")
+		return
+	}
 
 	for _, wk := range workloads {
 		if !wk.IsEmpty() {
