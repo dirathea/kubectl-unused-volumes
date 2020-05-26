@@ -1,4 +1,4 @@
-# kubectl-volume-reclaim kubectl
+# kubectl-unused-volumes
 
 A `kubectl` plugin to gather all PVC and output all pvcs that doesn't belong to any workloads.
 This plugins checks for standard kubernetes workloads : 
