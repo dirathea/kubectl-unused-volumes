@@ -14,6 +14,7 @@ import (
 
 var (
 	KubernetesConfigFlags *genericclioptions.ConfigFlags
+	noHeader              bool
 )
 
 func RootCmd() *cobra.Command {
@@ -27,7 +28,10 @@ func RootCmd() *cobra.Command {
 			viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			output, err := plugin.RunPlugin(KubernetesConfigFlags)
+			output, err := plugin.RunPlugin(plugin.Options{
+				KubernetesConfigFlags: KubernetesConfigFlags,
+				NoHeader:              noHeader,
+			})
 			if err != nil {
 				return errors.Cause(err)
 			}
@@ -41,6 +45,7 @@ func RootCmd() *cobra.Command {
 
 	KubernetesConfigFlags = genericclioptions.NewConfigFlags(false)
 	KubernetesConfigFlags.AddFlags(cmd.Flags())
+	cmd.Flags().BoolVar(&noHeader, "no-header", false, "Skip header")
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	return cmd
