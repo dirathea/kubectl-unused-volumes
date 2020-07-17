@@ -108,7 +108,11 @@ func (j job) GetVolumeNames() (volumeNames []string) {
 }
 
 func (j job) IsEmpty() bool {
-	return j.Status.Succeeded == *j.Spec.Completions
+	completions := int32(1)
+	if j.Spec.Completions != nil {
+		completions = *j.Spec.Completions
+	}
+	return j.Status.Succeeded == completions
 }
 
 func (j job) GetName() string {
