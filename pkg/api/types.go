@@ -12,6 +12,7 @@ const (
 type Workload interface {
 	GetName() string
 	GetVolumeNames() []string
+	// IsEmpty tells that the workload still has pod running
 	IsEmpty() bool
 }
 

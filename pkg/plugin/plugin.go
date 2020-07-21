@@ -14,9 +14,14 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err error) {
+type Options struct {
+	KubernetesConfigFlags *genericclioptions.ConfigFlags
+	NoHeaders             bool
+}
+
+func RunPlugin(options Options) (output string, err error) {
 	// log := logger.NewLogger()
-	config, err := configFlags.ToRESTConfig()
+	config, err := options.KubernetesConfigFlags.ToRESTConfig()
 	if err != nil {
 		err = errors.Wrap(err, "failed to read kubeconfig")
 		return
@@ -28,7 +33,7 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err e
 		return
 	}
 
-	volumes, err := GetVolumes(clientset, *configFlags.Namespace)
+	volumes, err := GetVolumes(clientset, *options.KubernetesConfigFlags.Namespace)
 	if err != nil {
 		err = errors.Wrap(err, "failed to get all pvc in namespaces")
 		return
@@ -47,7 +52,7 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err e
 	for _, f := range allResources {
 		fetcherFunction := f
 		fetchGroup.Go(func() error {
-			lists, err := fetcherFunction(clientset, *configFlags.Namespace)
+			lists, err := fetcherFunction(clientset, *options.KubernetesConfigFlags.Namespace)
 			if err == nil {
 				workloads = append(workloads, lists...)
 			}
@@ -70,7 +75,9 @@ func RunPlugin(configFlags *genericclioptions.ConfigFlags) (output string, err e
 	}
 
 	table := uitable.New()
-	table.AddRow("Name", "Volume Name", "Size", "Reason", "Used By")
+	if !options.NoHeaders {
+		table.AddRow("Name", "Volume Name", "Size", "Reason", "Used By")
+	}
 
 	for _, p := range volumes {
 		if p != nil {
