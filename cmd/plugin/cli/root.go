@@ -15,14 +15,25 @@ import (
 var (
 	KubernetesConfigFlags *genericclioptions.ConfigFlags
 	Opts                  plugin.Options
+	commandExample        = `
+	# Get all unused volumes in default namespace
+	kubectl unused-volumes
+
+	# Get all unused volumes in all namespaces
+	kubectl unused-volumes --all-namespaces
+
+	# Remove headers
+	kubectl unused-volumes --no-headers
+	`
 )
 
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:           "volume-reclaim",
+		Use:           "unused-volumes",
 		Short:         "",
 		Long:          `.`,
 		SilenceErrors: true,
+		Example:       commandExample,
 		SilenceUsage:  true,
 		PreRun: func(cmd *cobra.Command, args []string) {
 			viper.BindPFlags(cmd.Flags())
@@ -45,7 +56,7 @@ func RootCmd() *cobra.Command {
 	Opts = plugin.Options{
 		KubernetesConfigFlags: KubernetesConfigFlags,
 	}
-	cmd.Flags().BoolVar(&Opts.NoHeader, "no-header", false, "Skip header")
+	cmd.Flags().BoolVar(&Opts.NoHeaders, "no-headers", false, "Skip header")
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	return cmd

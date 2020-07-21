@@ -16,7 +16,7 @@ import (
 
 type Options struct {
 	KubernetesConfigFlags *genericclioptions.ConfigFlags
-	NoHeader              bool
+	NoHeaders             bool
 }
 
 func RunPlugin(options Options) (output string, err error) {
@@ -75,7 +75,7 @@ func RunPlugin(options Options) (output string, err error) {
 	}
 
 	table := uitable.New()
-	if !options.NoHeader {
+	if !options.NoHeaders {
 		table.AddRow("Name", "Volume Name", "Size", "Reason", "Used By")
 	}
 
