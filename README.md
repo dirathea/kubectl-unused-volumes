@@ -10,8 +10,16 @@ This plugins checks for standard kubernetes workloads :
 
 ## Quick Start
 
+Install unused-volumes via [krew](https://krew.sigs.k8s.io/)
+
 ```
 kubectl krew install unused-volumes
+
+# Scan for all unused volumes in current context and default namespace
+
 kubectl unused-volumes
 ```
 
+## Demo
+
+![Scan Unused pvc on namespace infra](assets/example-1.png)
