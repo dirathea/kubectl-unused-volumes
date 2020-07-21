@@ -1,0 +1,50 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: unused-volumes
+spec:
+  version: "{{ .TagName }}"
+  platforms:
+  - selector:
+      matchLabels:
+        os: linux
+        arch: amd64
+    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_linux_amd64.tar.gz" .TagName }}
+    files:
+    - from: "./unused-volumes"
+      to: "."
+    - from: LICENSE
+      to: "."
+    bin: "unused-volumes"
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: amd64
+    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_darwin_amd64.tar.gz" .TagName }}
+    files:
+    - from: "./unused-volumes"
+      to: "."
+    - from: LICENSE
+      to: "."
+    bin: "unused-volumes"
+  - selector:
+      matchLabels:
+        os: windows
+        arch: amd64
+    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_windows_amd64.zip" .TagName }}
+    files:
+    - from: "/unused-volumes.exe"
+      to: "."
+    - from: LICENSE
+      to: "."
+    bin: "unused-volumes.exe"
+  shortDescription: List unused PVCs
+  homepage: https://github.com/dirathea/kubectl-unused-volumes
+  description: |
+    Kubectl plugins to gather all PVC and check whether it used in any workloads on cluster or not.
+    This plugin lists all PVCs that are not used by any
+        - DaemonSet
+        - Deployment
+        - Job
+        - StatefulSet
+    Thus it helps to find unused PersitentVolumes which just cost money.
