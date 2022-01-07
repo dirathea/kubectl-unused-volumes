@@ -76,13 +76,13 @@ func RunPlugin(options Options) (output string, err error) {
 
 	table := uitable.New()
 	if !options.NoHeaders {
-		table.AddRow("Name", "Volume Name", "Size", "Reason", "Used By")
+		table.AddRow("Name", "Volume Name", "Size", "Namespace", "Reason", "Used By")
 	}
 
 	for _, p := range volumes {
 		if p != nil {
 			storageSize := p.Spec.Resources.Requests[v1.ResourceStorage]
-			table.AddRow(p.Name, p.Spec.VolumeName, storageSize.String(), p.Reason, workload.Join(p.Workloads, ","))
+			table.AddRow(p.Name, p.Spec.VolumeName, storageSize.String(), p.Namespace, p.Reason, workload.Join(p.Workloads, ","))
 		}
 	}
 	output = table.String()
