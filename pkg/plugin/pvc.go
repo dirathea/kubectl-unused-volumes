@@ -1,13 +1,15 @@
 package plugin
 
 import (
+	"context"
+
 	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetVolumes(clientSet *kubernetes.Clientset, namespace string) (volumes []*api.Volume, err error) {
-	list, err := clientSet.CoreV1().PersistentVolumeClaims(namespace).List(metaV1.ListOptions{})
+func GetVolumes(ctx context.Context, clientSet *kubernetes.Clientset, namespace string) (volumes []*api.Volume, err error) {
+	list, err := clientSet.CoreV1().PersistentVolumeClaims(namespace).List(ctx, metaV1.ListOptions{})
 	if err != nil {
 		return
 	}
