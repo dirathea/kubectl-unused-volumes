@@ -1,13 +1,15 @@
 package workload
 
 import (
+	"context"
+
 	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-func GetAllDeployment(clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
-	workloadList, err := clientSet.AppsV1().Deployments(namespace).List(metaV1.ListOptions{})
+func GetAllDeployment(ctx context.Context, clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
+	workloadList, err := clientSet.AppsV1().Deployments(namespace).List(ctx, metaV1.ListOptions{})
 	if err != nil {
 		return
 	}
@@ -18,8 +20,8 @@ func GetAllDeployment(clientSet *kubernetes.Clientset, namespace string) (worklo
 	return
 }
 
-func GetAllDaemonSet(clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
-	workloadList, err := clientSet.AppsV1().DaemonSets(namespace).List(metaV1.ListOptions{})
+func GetAllDaemonSet(ctx context.Context, clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
+	workloadList, err := clientSet.AppsV1().DaemonSets(namespace).List(ctx, metaV1.ListOptions{})
 	if err != nil {
 		return
 	}
@@ -31,8 +33,8 @@ func GetAllDaemonSet(clientSet *kubernetes.Clientset, namespace string) (workloa
 	return
 }
 
-func GetAllStatefulset(clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
-	workloadList, err := clientSet.AppsV1().StatefulSets(namespace).List(metaV1.ListOptions{})
+func GetAllStatefulset(ctx context.Context, clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
+	workloadList, err := clientSet.AppsV1().StatefulSets(namespace).List(ctx, metaV1.ListOptions{})
 	if err != nil {
 		return
 	}
@@ -44,8 +46,8 @@ func GetAllStatefulset(clientSet *kubernetes.Clientset, namespace string) (workl
 	return
 }
 
-func GetAllJobs(clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
-	workloadList, err := clientSet.BatchV1().Jobs(namespace).List(metaV1.ListOptions{})
+func GetAllJobs(ctx context.Context, clientSet *kubernetes.Clientset, namespace string) (workloads []api.Workload, err error) {
+	workloadList, err := clientSet.BatchV1().Jobs(namespace).List(ctx, metaV1.ListOptions{})
 	if err != nil {
 		return
 	}

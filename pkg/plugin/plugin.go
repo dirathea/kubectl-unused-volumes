@@ -17,6 +17,7 @@ import (
 type Options struct {
 	KubernetesConfigFlags *genericclioptions.ConfigFlags
 	NoHeaders             bool
+	AllNamespaces         bool
 }
 
 func RunPlugin(options Options) (output string, err error) {
@@ -33,13 +34,13 @@ func RunPlugin(options Options) (output string, err error) {
 		return
 	}
 
-	volumes, err := GetVolumes(clientset, *options.KubernetesConfigFlags.Namespace)
+	volumes, err := GetVolumes(context.Background(), clientset, *options.KubernetesConfigFlags.Namespace)
 	if err != nil {
 		err = errors.Wrap(err, "failed to get all pvc in namespaces")
 		return
 	}
 
-	allResources := []func(client *kubernetes.Clientset, namespace string) ([]api.Workload, error){
+	allResources := []func(ctx context.Context, client *kubernetes.Clientset, namespace string) ([]api.Workload, error){
 		workload.GetAllDaemonSet,
 		workload.GetAllDeployment,
 		workload.GetAllJobs,
@@ -52,7 +53,7 @@ func RunPlugin(options Options) (output string, err error) {
 	for _, f := range allResources {
 		fetcherFunction := f
 		fetchGroup.Go(func() error {
-			lists, err := fetcherFunction(clientset, *options.KubernetesConfigFlags.Namespace)
+			lists, err := fetcherFunction(context.Background(), clientset, *options.KubernetesConfigFlags.Namespace)
 			if err == nil {
 				workloads = append(workloads, lists...)
 			}

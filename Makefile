@@ -1,37 +1,32 @@
-
 export GO111MODULE=on
 
 .PHONY: test
-test:
+test: ## test
 	go test ./pkg/... ./cmd/... -coverprofile cover.out
 
 .PHONY: bin
-bin: fmt vet
+bin: fmt vet ## build
 	go build -o bin/unused-volumes github.com/dirathea/kubectl-unused-volumes/cmd/plugin
 
 .PHONY: fmt
-fmt:
+fmt: ## fmt
 	go fmt ./pkg/... ./cmd/...
 
 .PHONY: vet
-vet:
+vet: ## vet
 	go vet ./pkg/... ./cmd/...
 
-.PHONY: kubernetes-deps
-kubernetes-deps:
-	go get k8s.io/client-go@v11.0.0
-	go get k8s.io/api@kubernetes-1.14.0
-	go get k8s.io/apimachinery@kubernetes-1.14.0
-	go get k8s.io/cli-runtime@kubernetes-1.14.0
-
 .PHONY: setup
-setup:
+setup: ## setup
 	make -C setup
 
 .PHONY: snapshot
-snapshot: fmt vet
+snapshot: fmt vet ## snapshot
 	goreleaser build --snapshot --rm-dist
 
 .PHONY: release
-release: fmt vet
+release: fmt vet ## Release
 	goreleaser
+
+help: ## Display this help.
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)

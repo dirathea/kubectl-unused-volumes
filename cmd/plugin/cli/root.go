@@ -57,6 +57,7 @@ func RootCmd() *cobra.Command {
 		KubernetesConfigFlags: KubernetesConfigFlags,
 	}
 	cmd.Flags().BoolVar(&Opts.NoHeaders, "no-headers", false, "Skip header")
+	cmd.Flags().BoolVar(&Opts.AllNamespaces, "all-namespaces", false, "Skip header")
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	return cmd
