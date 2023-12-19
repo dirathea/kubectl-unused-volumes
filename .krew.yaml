@@ -9,7 +9,7 @@ spec:
       matchLabels:
         os: linux
         arch: amd64
-    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_linux_amd64.tar.gz" .TagName }}
+    {{addURIAndSha "https://github.com/ava-labs/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_linux_amd64.tar.gz" .TagName }}
     files:
     - from: "./unused-volumes"
       to: "."
@@ -20,7 +20,7 @@ spec:
       matchLabels:
         os: darwin
         arch: amd64
-    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_darwin_amd64.tar.gz" .TagName }}
+    {{addURIAndSha "https://github.com/ava-labs/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_darwin_amd64.tar.gz" .TagName }}
     files:
     - from: "./unused-volumes"
       to: "."
@@ -31,7 +31,7 @@ spec:
       matchLabels:
         os: windows
         arch: amd64
-    {{addURIAndSha "https://github.com/dirathea/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_windows_amd64.zip" .TagName }}
+    {{addURIAndSha "https://github.com/ava-labs/kubectl-unused-volumes/releases/download/{{ .TagName }}/kubectl-unused-volumes_windows_amd64.zip" .TagName }}
     files:
     - from: "/unused-volumes.exe"
       to: "."
@@ -39,7 +39,7 @@ spec:
       to: "."
     bin: "unused-volumes.exe"
   shortDescription: List unused PVCs
-  homepage: https://github.com/dirathea/kubectl-unused-volumes
+  homepage: https://github.com/ava-labs/kubectl-unused-volumes
   description: |
     Kubectl plugins to gather all PVC and check whether it used in any workloads on cluster or not.
     This plugin lists all PVCs that are not used by any

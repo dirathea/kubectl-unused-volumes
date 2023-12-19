@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dirathea/kubectl-unused-volumes/pkg/plugin"
+	"github.com/ava-labs/kubectl-unused-volumes/pkg/plugin"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

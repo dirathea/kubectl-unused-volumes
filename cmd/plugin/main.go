@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dirathea/kubectl-unused-volumes/cmd/plugin/cli"
+	"github.com/ava-labs/kubectl-unused-volumes/cmd/plugin/cli"
 )
 
 func main() {

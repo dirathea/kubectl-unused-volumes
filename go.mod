@@ -1,4 +1,4 @@
-module github.com/dirathea/kubectl-unused-volumes
+module github.com/ava-labs/kubectl-unused-volumes
 
 go 1.12
 

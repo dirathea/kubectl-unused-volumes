@@ -3,7 +3,7 @@ package plugin
 import (
 	"context"
 
-	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
+	"github.com/ava-labs/kubectl-unused-volumes/pkg/api"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

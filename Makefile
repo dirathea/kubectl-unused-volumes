@@ -6,7 +6,7 @@ test: ## test
 
 .PHONY: bin
 bin: fmt vet ## build
-	go build -o bin/unused-volumes github.com/dirathea/kubectl-unused-volumes/cmd/plugin
+	go build -o bin/unused-volumes github.com/ava-labs/kubectl-unused-volumes/cmd/plugin
 
 .PHONY: fmt
 fmt: ## fmt

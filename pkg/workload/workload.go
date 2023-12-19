@@ -3,7 +3,7 @@ package workload
 import (
 	"fmt"
 
-	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
+	"github.com/ava-labs/kubectl-unused-volumes/pkg/api"
 	appsV1 "k8s.io/api/apps/v1"
 	batchV1 "k8s.io/api/batch/v1"
 )

@@ -1,7 +1,7 @@
 project_name: kubectl-unused-volumes
 release:
   github:
-    owner: dirathea
+    owner: ava-labs
     name: kubectl-unused-volumes
 builds:
   - id: kubectl-unused-volumes
@@ -18,7 +18,7 @@ builds:
       - GO111MODULE=on
     main: cmd/plugin/main.go
     ldflags: -s -w
-      -X github.com/dirathea/kubectl-unused-volumes/pkg/version.version=
+      -X github.com/ava-labs/kubectl-unused-volumes/pkg/version.version=
 archives:
   - id: kubectl-unused-volumes
     builds:

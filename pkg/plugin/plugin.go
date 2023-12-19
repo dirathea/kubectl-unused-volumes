@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/dirathea/kubectl-unused-volumes/pkg/api"
-	"github.com/dirathea/kubectl-unused-volumes/pkg/workload"
+	"github.com/ava-labs/kubectl-unused-volumes/pkg/api"
+	"github.com/ava-labs/kubectl-unused-volumes/pkg/workload"
 	"github.com/gosuri/uitable"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
